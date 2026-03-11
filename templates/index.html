@@ -1,18 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>Language translator english to hindi</h2>
-    <form action="" method="post">
-        <textarea name="data" placeholder="enter text" required></textarea>
-        <button type="submit">Translate</button>
-    </form>
+    <title>English to Hindi Translator</title>
 
-    <h4>Result</h4>
-    {{ translated_text }}
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        /* main container */
+
+        .container {
+            background: white;
+            width: 420px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        /* title */
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* labels */
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        /* dropdown */
+
+        select {
+            width: 100%;
+            padding: 9px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        /* textarea */
+
+        textarea {
+            width: 100%;
+            height: 85px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: none;
+            font-size: 14px;
+            margin-top: 8px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* buttons */
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 6px;
+            background: #667eea;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: scale(1.02);
+        }
+
+        /* result title */
+
+        h4 {
+            margin-top: 12px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        /* result box */
+
+        .result {
+            background: #f7f7f7;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            min-height: 35px;
+            max-height: 80px;
+            overflow-y: auto;
+            font-size: 15px;
+        }
+
+        /* mobile support */
+
+        @media(max-width:500px) {
+
+            .container {
+                width: 90%;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Multilingual AI Translator</h2>
+
+        <form action="" method="post">
+            <label>Source Language</label>
+            <select id="source_lang" name="source_lang">
+                {% for lang,code in languages.items() %}
+                <option value="{{code}}">{{lang}}</option>
+                {% endfor %}
+            </select>
+
+            <label>Target Language</label>
+            <select id="target_lang" name="target_lang">
+                {% for lang,code in languages.items() %}
+                <option value="{{code}}">{{lang}}</option>
+                {% endfor %}
+            </select>
+
+            <button type="button" onclick="startSpeech()">🎤 Speak</button>
+            <textarea id="data" name="data" placeholder="Enter text to translate..." required></textarea>
+            <button type="submit">Translate</button>
+        </form>
+
+        <h4>Result</h4>
+        <div class="result">
+            {{ translated_text }}
+        </div>
+
+        <button type="button" onclick="copyText()">📋 Copy</button>
+    </div>
+    <script>
+        function startSpeech() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US";
+            recognition.start();
+            recognition.onresult = function (event) {
+                document.getElementById("data").value = event.results[0][0].transcript;
+            };
+        }
+    </script>
 </body>
+
 </html>
